@@ -65,6 +65,12 @@ informer.start().then(() => {
             return;
         }
 
+        if (workspaceInfo.status.phase !== "Running") {
+            res.statusCode = 404;
+            res.end();
+            return;
+        }
+
         const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
 
         proxy.web(req, res, {
@@ -76,6 +82,17 @@ informer.start().then(() => {
     server.on('upgrade', (req, socket, head) => {
         const workspaceId = req.headers['x-workspace-id'];
         const workspaceInfo = getWorkspaceInfo(workspaceId);
+
+        if (!workspaceInfo) {
+            socket.end();
+            return;
+        }
+
+        if (workspaceInfo.status.phase !== "Running") {
+            socket.end();
+            return;
+        }
+
         const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
 
         proxy.ws(req, socket, head, {
