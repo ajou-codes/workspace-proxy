@@ -65,7 +65,7 @@ informer.start().then(() => {
             return;
         }
 
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}`;
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
 
         proxy.web(req, res, {
             target: workspaceUrl,
@@ -76,7 +76,7 @@ informer.start().then(() => {
     server.on('upgrade', (req, socket, head) => {
         const workspaceId = req.headers['x-workspace-id'];
         const workspaceInfo = getWorkspaceInfo(workspaceId);
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}`;
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
 
         proxy.ws(req, socket, head, {
             target: workspaceUrl
