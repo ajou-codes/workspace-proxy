@@ -10,7 +10,7 @@ RUN yarn install
 
 # Compile typescript
 COPY . .
-RUN tsc
+RUN yarn run tsc
 
 
 FROM node:16
