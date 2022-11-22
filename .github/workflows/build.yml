@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: k8s
+
+    steps:
+      - name: Get short SHA
+        id: slug
+        run: echo "::set-output name=sha7::$(echo ${GITHUB_SHA} | cut -c1-7)"
+
+
+      - uses: actions/checkout@v3
+
+
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          version: latest
+          endpoint: builders
+          config-inline: |
+            [registry."registry.container-registry.svc.cluster.local:5000"]
+              http = true
+      
+
+      # Create & Push docker image
+      - name: Build and push Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: .
+          file: infra/docker/Dockerfile
+          tags: |
+            registry.container-registry.svc.cluster.local:5000/workspace-proxy:${{ steps.slug.outputs.sha7 }}
+          cache-from: type=registry,ref=registry.container-registry.svc.cluster.local:5000/workspace-proxy:buildcache
+          cache-to: type=registry,ref=registry.container-registry.svc.cluster.local:5000/workspace-proxy:buildcache,mode=max
