@@ -4,10 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/http-proxy": "^1.17.9",
+    "@types/node": "^18.11.9",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "@kubernetes/client-node": "^0.17.1"
+    "@kubernetes/client-node": "^0.17.1",
+    "http-proxy": "^1.18.1"
   }
 }
