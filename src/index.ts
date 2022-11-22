@@ -31,7 +31,7 @@ informer.on('error', (err: k8s.V1Pod) => {
 
 informer.start().then(() => {
     function getWorkspaceInfo(workspaceId): k8s.V1Pod {
-        return informer.get(workspaceId);
+        return informer.get(workspaceId, NAMESPACE_NAME);
     }
 
     const proxy = httpProxy.createProxyServer({ ws: true, secure: false, changeOrigin: true });
@@ -65,7 +65,7 @@ informer.start().then(() => {
             return;
         }
 
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}.${NAMESPACE_NAME}.pod.cluster.local`;
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}`;
 
         proxy.web(req, res, {
             target: workspaceUrl,
@@ -76,7 +76,7 @@ informer.start().then(() => {
     server.on('upgrade', (req, socket, head) => {
         const workspaceId = req.headers['x-workspace-id'];
         const workspaceInfo = getWorkspaceInfo(workspaceId);
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}.${NAMESPACE_NAME}.pod.cluster.local`;
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}`;
 
         proxy.ws(req, socket, head, {
             target: workspaceUrl
