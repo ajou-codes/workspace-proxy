@@ -40,6 +40,10 @@ informer.start().then(() => {
         // node.js http library make headers all lowercase
         const workspaceId = req.headers['x-workspace-id'];
 
+        console.log('workspace id: ' + workspaceId);
+        console.log('workspace list k8s: ');
+        console.log(informer.list());
+
         if (!workspaceId){
             res.statusCode = 404;
             res.end();
@@ -52,6 +56,8 @@ informer.start().then(() => {
 
         // find pod ip
         const workspaceInfo = getWorkspaceInfo(workspaceId);
+        console.log('workspaceInfo: ');
+        console.log(workspaceInfo);
 
         if (!workspaceInfo){
             res.statusCode = 404;
