@@ -39,7 +39,7 @@ jobs:
         with:
           push: true
           context: .
-          file: infra/docker/Dockerfile
+          file: Dockerfile
           tags: |
             registry.container-registry.svc.cluster.local:5000/workspace-proxy:${{ steps.slug.outputs.sha7 }}
           cache-from: type=registry,ref=registry.container-registry.svc.cluster.local:5000/workspace-proxy:buildcache
