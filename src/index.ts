@@ -7,7 +7,7 @@ kc.loadFromDefault();
 
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 
-const NAMESPACE_NAME = 'ajou-coding-hub';
+const NAMESPACE_NAME = 'workspace';
 const LABEL_SELECTOR = 'ajou.codes/type=workspace';
 
 const listFn = () => k8sApi.listNamespacedPod(
