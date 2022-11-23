@@ -62,7 +62,7 @@ informer.start().then(() => {
         }
 
         if (workspaceInfo.status.phase !== "Running") {
-            res.statusCode = 404;
+            res.statusCode = 503;
             res.end();
             return;
         }
