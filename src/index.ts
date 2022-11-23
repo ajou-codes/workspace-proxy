@@ -50,10 +50,6 @@ informer.start().then(() => {
             return;
         }
 
-        // WIP: for port forwarding
-        const port = req.headers['x-workspace-port'];
-
-
         // find pod ip
         const workspaceInfo = getWorkspaceInfo(workspaceId);
         console.log('workspaceInfo: ');
@@ -71,7 +67,9 @@ informer.start().then(() => {
             return;
         }
 
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
+        const port = req.headers['x-workspace-port'];
+
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}:${(port ?? 3000)}`;
 
         proxy.web(req, res, {
             target: workspaceUrl,
@@ -93,7 +91,9 @@ informer.start().then(() => {
             return;
         }
 
-        const workspaceUrl = `http://${workspaceInfo.status.podIP}:3000`;
+        const port = req.headers['x-workspace-port'];
+
+        const workspaceUrl = `http://${workspaceInfo.status.podIP}:${(port ?? 3000)}`;
 
         proxy.ws(req, socket, head, {
             target: workspaceUrl
